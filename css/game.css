@@ -2,12 +2,28 @@
                  table-layout: fixed;
                  border-spacing: 0;   }
 .background td { padding: 0;          }
-.lava          { background: rgb(148, 17, 17); }
-.wall          { background: rgb(73, 67, 236);   }
-.floater	   { background: green;	  }
+.lava          { background: #0BD318; }
+.wall          { background: #1D62F0;   }
+
+.actor  { position: absolute;   }
+.coin	{ background: silver;	}
+.enemy  { background: purple;}
+.player { background: rgb(64, 64, 64); }
+
+.startOver { background: orange;   }
+
+.portalOpen { background: gold; }
+.portalClosed { background-color: clear;}
 .game {
   overflow: hidden;
   max-width: 600px;
   max-height: 450px;
   position: relative;
+}
+
+.lost .player {
+  background: rgb(160, 64, 64);
+}
+.won .player {
+  box-shadow: -4px -7px 8px gold, 4px -7px 8px gold;
 }
