@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Interactive Art</title>
+<script>
+	var canvas;
+	var context;
+	var shapes = [];
+	var rectangles = [];
+	var circles = [];
+	var timer;
+	var text;
+	var textDirection = "";
+	
+	function init() {
+		canvas = document.getElementById('canvas');
+		context = canvas.getContext("2d");
+		
+		resizeCanvas();
+		window.addEventListener('resize', resizeCanvas, false);
+		window.addEventListener('orientationchange', resizeCanvas, false);
+		
+		canvas.onclick = function(event) {
+			handleClick(event.clientX, event.clientY);
+		};
+	
+		var timer = setInterval(resizeCanvas, 30);
+		setInterval ('animate()', 30);
+ 			
+ 			textDirection ="right";
+            textXpos = 5;
+            text = "Interactive Art!"; 
+	}
+	
+ 		function animate() {            
+ 			var metrics = context.measureText(text);
+            var textWidth = metrics.width;
+
+            if (textDirection == "right") {
+                textXpos += 5;
+ 			if (textXpos > canvas.width - textWidth) {
+                textDirection = "left";
+                }
+            }
+            else { textXpos -= 5;
+            	if (textXpos < 5) {
+                    textDirection = "right";
+                }                    
+            }
+
+            context.font = '40px Arial';
+            context.fillStyle = '#FF0000';
+            context.textBaseline = 'top';
+            context.fillText  ( text, textXpos, 180);    
+          }  
+
+	function Shape(x,y,color) {
+		this.x = x;
+		this.y = y;
+		this.color = color;
+		
+		this.vx = Math.random() * 10 - 5;
+		this.vy = Math.random() * 10 - 5;
+	}
+	function handleClick(x,y) {
+		var colors = ['red','white', 'pink'];
+		var color = colors[Math.floor(Math.random()*colors.length)];
+		shapes.push(new Shape(x,y,color));
+		for (var i=0; i<shapes.length; i++) {
+			drawTriangle(shapes[i]);
+		}
+		rectangles.push(new Shape(x,y,color));
+		for (var i=0; i<rectangles.length; i++) {
+			drawRect(rectangles[i]);
+		}
+		circles.push(new Shape(x,y,color));
+		for (var i=0; i<circles.length; i++) {
+			drawCircle(circles[i]);
+		}
+	}
+	function drawTriangle(triangle) {
+			context.beginPath();
+			context.moveTo(triangle.x,triangle.y); 
+			context.lineTo(triangle.x+30,triangle.y+15);
+			context.lineTo(triangle.x+15,triangle.y-30);
+			context.fillStyle = triangle.color;
+			context.fill();
+	
+	}
+	function drawRect(shape) {
+		context.beginPath();
+  		context.fillRect(25,25,30,30);
+	
+	}
+	function drawCircle(shape) {
+		  context.fillRect(25,25,30,30);
+	}
+	function resizeCanvas() {
+		canvas.width = window.innerWidth-10;
+		canvas.height = window.innerHeight-10;
+		fillBackgroundColor();
+		for (var i=0; i<shapes.length; i++) {
+			var t = shapes[i];
+			drawTriangle(t);
+		
+			if (t.x + t.vx > canvas.width || t.x + t.vx < 0)
+				t.vx = -t.vx
+			if (t.y + t.vy > canvas.height || t.y + t.vy < 0)
+				t.vy = -t.vy
+
+			t.x += t.vx;
+			t.y += t.vy;
+		}
+		for (var i=0; i<rectangles.length; i++) {
+			var r = rectangles[i];
+			drawRect(r);
+		
+			if (r.x + r.vx > canvas.width || r.x + r.vx < 0)
+				r.vx = -r.vx
+			if (r.y + r.vy > canvas.height || r.y + r.vy < 0)
+				r.vy = -r.vy
+
+			r.x += r.vx;
+			r.y += r.vy;
+		}
+		for (var i=0; i<shapes.length; i++) {
+			var c = shapes[i];
+			drawCircle(c);
+		
+			if (c.x + c.vx > canvas.width || c.x + c.vx < 0)
+				c.vx = -r.vx
+			if (c.y + c.vy > canvas.height || c.y + c.vy < 0)
+				c.vy = -c.vy
+
+			c.x += c.vx;
+			c.y += c.vy;
+		}
+	}
+	function fillBackgroundColor() {
+		
+		context.fillStyle = "gold";
+		context.fillRect(0,0,canvas.width,canvas.height);
+	}
+	window.onload = init;
+</script>
+</head>
+<body>
+	<canvas id="canvas" width="500" height="500"></canvas>
+</body>
+</html>
